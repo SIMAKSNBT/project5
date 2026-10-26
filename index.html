@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMAK (Siap Memasak) SNBT - Racik Strategi Belajar & Masak Skor PTN!</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter & Orbitron -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brandRed: '#EF4444',
+                        brandOrange: '#F97316',
+                        darkBg: '#0F0F12',
+                        darkCard: '#18181C',
+                        darkBorder: '#27272A',
+                        lightBg: '#F8FAFC',
+                        lightCard: '#FFFFFF',
+                        lightBorder: '#E2E8F0'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        gamer: ['Orbitron', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom dynamic gradient utilities */
+        .gradient-text {
+            background: linear-gradient(135deg, #EF4444 0%, #F97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #EF4444 0%, #F97316 100%);
+        }
+        .glow-orange {
+            box-shadow: 0 0 25px rgba(249, 115, 22, 0.35);
+        }
+        .glow-red {
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.35);
+        }
+
+        /* Smooth theme transition */
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Webkit scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #27272A;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #F97316;
+        }
+    </style>
+</head>
+<body class="bg-lightBg text-slate-800 dark:bg-darkBg dark:text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-brandOrange selection:text-white">
+
+    <!-- NAVIGATION BAR -->
+    <nav class="sticky top-0 z-40 bg-white/90 dark:bg-darkBg/90 backdrop-blur-md border-b border-lightBorder dark:border-darkBorder transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo SIMAK SNBT -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('schedule')">
+                    <div class="w-10 h-10 rounded-xl gradient-bg flex items-center justify-center font-gamer font-black text-xl text-white shadow-lg glow-red">
+                        <i class="fa-solid fa-fire-burner"></i>
+                    </div>
+                    <div>
+                        <span class="font-gamer font-bold text-lg sm:text-xl tracking-wider text-slate-900 dark:text-white">SIMAK <span class="gradient-text">SNBT</span></span>
+                        <span class="text-[9px] sm:text-[10px] block font-semibold text-orange-500 dark:text-orange-400 -mt-1 tracking-widest uppercase">Siap Memasak Skor PTN</span>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav Links -->
+                <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <button onclick="switchTab('schedule')" id="nav-schedule" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-orange-500 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-darkCard transition flex items-center gap-2">
+                        <i class="fa-solid fa-kitchen-set text-brandOrange"></i> Resep Harian
+                    </button>
+                    <button onclick="switchTab('material')" id="nav-material" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-orange-500 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-darkCard transition flex items-center gap-2">
+                        <i class="fa-solid fa-book-open-reader text-brandRed"></i> Bahan Materi
+                    </button>
+                    <button onclick="switchTab('quiz')" id="nav-quiz" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-orange-500 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-darkCard transition flex items-center gap-2">
+                        <i class="fa-solid fa-fire text-amber-500"></i> Uji Racikan (Kuis)
+                    </button>
+                    <button onclick="switchTab('analytics')" id="nav-analytics" class="nav-btn px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-orange-500 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-darkCard transition flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-emerald-500"></i> Diagram MMR & Evaluasi
+                    </button>
+                    <button onclick="switchTab('pricing')" id="nav-pricing" class="nav-btn px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 hover:opacity-90 transition flex items-center gap-1 shadow-md">
+                        <i class="fa-solid fa-utensils"></i> CHEF PASS
+                    </button>
+                </div>
+
+                <!-- Right Controls: Theme Toggle & Target Badge -->
+                <div class="hidden sm:flex items-center space-x-3">
+                    <!-- Theme Toggle Button -->
+                    <button onclick="toggleTheme()" class="p-2.5 rounded-xl bg-slate-100 dark:bg-darkCard border border-lightBorder dark:border-darkBorder text-slate-700 dark:text-amber-400 hover:scale-105 transition shadow-sm" title="Ubah Tema Terang / Gelap">
+                        <i class="fa-solid fa-sun text-sm dark:hidden"></i>
+                        <i class="fa-solid fa-moon text-sm hidden dark:block"></i>
+                    </button>
+
+                    <div class="bg-slate-100 dark:bg-darkCard border border-lightBorder dark:border-darkBorder px-3 py-1.5 rounded-xl flex items-center gap-2">
+                        <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-red-600 to-orange-400 flex items-center justify-center text-[10px] font-bold text-white">
+                            ITB
+                        </div>
+                        <div class="text-xs">
+                            <p class="font-bold text-slate-800 dark:text-slate-200" id="userTargetDisplay">Teknik Informatika</p>
+                            <p class="text-[10px] text-slate-500 dark:text-slate-400">Target: <span class="text-brandOrange font-semibold">ITB 2027</span></p>
+                        </div>
+                    </div>
+                    <button onclick="openOnboardingModal()" class="text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-darkCard transition" title="Pengaturan Racikan AI">
+                        <i class="fa-solid fa-sliders"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile menu & theme button -->
+                <div class="md:hidden flex items-center gap-2">
+                    <button onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-100 dark:bg-darkCard text-slate-700 dark:text-amber-400">
+                        <i class="fa-solid fa-sun text-sm dark:hidden"></i>
+                        <i class="fa-solid fa-moon text-sm hidden dark:block"></i>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="text-slate-700 dark:text-slate-300 p-2 rounded-lg">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-darkCard border-b border-lightBorder dark:border-darkBorder px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('schedule'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-darkBg flex items-center gap-2 text-sm font-medium">
+                <i class="fa-solid fa-kitchen-set text-brandOrange"></i> Resep Harian (Jadwal)
+            </button>
+            <button onclick="switchTab('material'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-darkBg flex items-center gap-2 text-sm font-medium">
+                <i class="fa-solid fa-book-open-reader text-brandRed"></i> Bahan Materi AI
+            </button>
+            <button onclick="switchTab('quiz'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-darkBg flex items-center gap-2 text-sm font-medium">
+                <i class="fa-solid fa-fire text-amber-500"></i> Uji Racikan (Kuis)
+            </button>
+            <button onclick="switchTab('analytics'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-xl text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-darkBg flex items-center gap-2 text-sm font-medium">
+                <i class="fa-solid fa-chart-line text-emerald-500"></i> Diagram MMR & Evaluasi
+            </button>
+            <button onclick="switchTab('pricing'); toggleMobileMenu();" class="w-full text-left px-3 py-2 rounded-xl font-bold text-slate-950 bg-gradient-to-r from-amber-500 to-orange-500 flex items-center gap-2 text-sm">
+                <i class="fa-solid fa-utensils"></i> UPGRADE CHEF PASS PRO
+            </button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+
+        <!-- TAB 1: RESEP HARIAN / JADWAL BELAJAR -->
+        <section id="tab-schedule" class="space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-6 md:p-10 shadow-sm">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-brandRed/10 dark:bg-brandRed/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute right-1/3 -top-10 w-64 h-64 bg-brandOrange/10 dark:bg-brandOrange/15 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="relative z-10 max-w-3xl">
+                    <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/30 text-brandOrange text-xs font-semibold mb-4">
+                        <i class="fa-solid fa-mortar-pestle animate-pulse"></i> Solusi Belajar Praktis: Racik Strategi, Masak Skor PTN!
+                    </span>
+                    <h1 class="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight mb-4">
+                        SIMAK SNBT: <span class="gradient-text">Siap Memasak Skor PTN Impianmu!</span>
+                    </h1>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm md:text-base leading-relaxed mb-6">
+                        Sulit membagi waktu antara sekolah, magang/PKL, dan belajar UTBK? AI Chef Scheduler membagikan mikro-jadwal harian 30-60 menit/hari. Materi ringkas &rarr; Kuis Kilat &rarr; Rekap MMR Performa & Diagnosa AI!
+                    </p>
+                    <div class="flex flex-wrap gap-4 items-center">
+                        <button onclick="openOnboardingModal()" class="px-6 py-3 rounded-xl gradient-bg font-bold text-white hover:shadow-lg hover:shadow-orange-500/25 transition flex items-center gap-2 text-xs md:text-sm">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> Racik Jadwal AI Baru
+                        </button>
+                        <button onclick="switchTab('material')" class="px-6 py-3 rounded-xl bg-slate-100 dark:bg-darkBg border border-lightBorder dark:border-darkBorder text-slate-800 dark:text-slate-200 hover:border-brandOrange transition text-xs md:text-sm font-semibold">
+                            Mulai Masak Materi <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FITUR: TARGET WAKTU SNBT (DENGAN MODAL ATUR TANGGAL) -->
+            <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder rounded-3xl p-6 md:p-8 space-y-6 shadow-sm transition-colors">
+                <!-- Header Component -->
+                <div class="flex items-center justify-between border-b border-lightBorder dark:border-darkBorder/60 pb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-2xl bg-orange-500/10 text-brandOrange flex items-center justify-center text-lg font-bold">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900 dark:text-white tracking-wide">Target Waktu SNBT</h2>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Pantau ritme konsistensi dan hitung mundur pelaksanaan ujian</p>
+                        </div>
+                    </div>
+                    <button onclick="openDateModal()" class="text-xs font-bold text-brandOrange hover:text-orange-600 dark:hover:text-orange-400 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-500/10 hover:bg-orange-500/20 transition">
+                        <i class="fa-regular fa-pen-to-square"></i> Atur Tanggal
+                    </button>
+                </div>
+
+                <!-- Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Konsistensi Belajar -->
+                    <div class="bg-slate-50 dark:bg-darkBg/80 border border-lightBorder dark:border-darkBorder rounded-2xl p-5 flex items-center justify-between shadow-xs">
+                        <div class="space-y-1">
+                            <h3 class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase tracking-wider">KONSISTENSI BELAJAR</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Telah berjalan sejak hari pertama</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-3xl font-extrabold text-brandOrange tracking-tight" id="consistencyDisplay">H+1</span>
+                            <span class="block text-xs font-bold text-slate-500 dark:text-slate-400">Hari</span>
+                        </div>
+                    </div>
+
+                    <!-- Sisa Waktu UTBK -->
+                    <div class="bg-slate-50 dark:bg-darkBg/80 border border-lightBorder dark:border-darkBorder rounded-2xl p-5 flex items-center justify-between shadow-xs">
+                        <div class="space-y-1">
+                            <h3 class="text-xs font-bold text-brandRed uppercase tracking-wider">SISA WAKTU UTBK</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Sebelum Ujian Dimulai</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-3xl font-extrabold text-brandRed tracking-tight" id="countdownDisplay">H-46</span>
+                            <span class="block text-xs font-bold text-brandRed">Hari Lagi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quote Footer -->
+                <p class="text-center text-xs italic text-slate-500 dark:text-slate-400 font-medium pt-2">
+                    "Kunci lulus SNBT: Konsisten 20–45 menit per hari jauh lebih ampuh daripada sistem semalam sebelum ujian!"
+                </p>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-4 rounded-2xl flex items-center gap-4 shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-brandRed text-xl font-bold">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Porsi Waktu Harian</p>
+                        <p class="text-base font-bold text-slate-900 dark:text-white" id="statDailyTime">1.5 Jam / Hari</p>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-4 rounded-2xl flex items-center gap-4 shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-brandOrange text-xl font-bold">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Target PTN</p>
+                        <p class="text-base font-bold text-slate-900 dark:text-white" id="statTargetPTN">Teknik / ITB</p>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-4 rounded-2xl flex items-center gap-4 shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 text-xl font-bold">
+                        <i class="fa-solid fa-fire-flame-curved"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Study Streak</p>
+                        <p class="text-base font-bold text-slate-900 dark:text-white">5 Hari Berturut</p>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-4 rounded-2xl flex items-center gap-4 shadow-sm">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 text-xl font-bold">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Skor Power / MMR</p>
+                        <p class="text-base font-bold text-emerald-500 font-gamer" id="statTotalMMR">740 / 1000 Pts</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily AI Scheduled Timeline -->
+            <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder rounded-3xl p-6 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-days text-brandOrange"></i> Resep Menu Belajar Mingguan (AI Scheduled)
+                        </h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Disesuaikan otomatis agar jam belajar tidak mengganggu aktivitas harian</p>
+                    </div>
+                    <span class="text-xs bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-3 py-1.5 rounded-xl border border-lightBorder dark:border-darkBorder self-start sm:self-auto font-semibold">
+                        Pekan Oktober 2026
+                    </span>
+                </div>
+
+                <!-- Schedule Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-3" id="weeklyScheduleContainer">
+                    <!-- Dynamic Days rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 2: BAHAN MATERI AI -->
+        <section id="tab-material" class="hidden space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-6 rounded-3xl shadow-sm">
+                <div>
+                    <div class="inline-flex items-center gap-2 text-xs font-semibold text-brandOrange bg-orange-500/10 px-3 py-1 rounded-full mb-2">
+                        <i class="fa-solid fa-pepper-hot"></i> Menu Materi Hari Ini (15 Menit Siap Saji)
+                    </div>
+                    <h2 class="text-2xl font-bold text-slate-900 dark:text-white">Bahan #03: Penalaran Logika & Diagram Venn</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm">Disarikan oleh AI SIMAK khusus untuk konsep cepat paham & siap eksekusi.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="switchTab('quiz')" class="px-5 py-2.5 rounded-xl gradient-bg font-bold text-white text-xs md:text-sm hover:opacity-90 transition flex items-center gap-2 shadow-md">
+                        Uji Racikan (Kuis) <i class="fa-solid fa-fire"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Main Reader Column -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-6 md:p-8 rounded-3xl space-y-6 leading-relaxed shadow-sm">
+                        <div class="border-b border-lightBorder dark:border-darkBorder pb-4">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">1. Penarikan Kesimpulan (Silogisme & Modus)</h3>
+                            <p class="text-slate-600 dark:text-slate-300 text-sm">
+                                Di dalam soal TPS UTBK Penalaran Umum, kamu sering menemukan 3 pola utama penarikan kesimpulan baku yang 100% selalu keluar di ujian:
+                            </p>
+                        </div>
+
+                        <!-- Highlight Card -->
+                        <div class="bg-slate-50 dark:bg-slate-900/80 border-l-4 border-brandOrange p-4 rounded-r-2xl space-y-3">
+                            <p class="text-xs font-bold text-brandOrange tracking-widest uppercase"><i class="fa-solid fa-bolt"></i> Formula Bumbu Cepat AI</p>
+                            <ul class="text-xs md:text-sm text-slate-700 dark:text-slate-300 space-y-2">
+                                <li><strong class="text-slate-900 dark:text-white">Modus Ponens:</strong> Jika P &rarr; Q, dan terjadi P, maka kesimpulannya <strong>Q</strong>.</li>
+                                <li><strong class="text-slate-900 dark:text-white">Modus Tollens:</strong> Jika P &rarr; Q, dan terjadi ~Q, maka kesimpulannya <strong>~P</strong>.</li>
+                                <li><strong class="text-slate-900 dark:text-white">Silogisme:</strong> Jika P &rarr; Q dan Q &rarr; R, maka kesimpulannya <strong>P &rarr; R</strong>.</li>
+                            </ul>
+                        </div>
+
+                        <div class="space-y-3">
+                            <h4 class="font-bold text-slate-800 dark:text-slate-200 text-sm">Trik Cepat Anti Terkecoh:</h4>
+                            <p class="text-slate-600 dark:text-slate-300 text-sm">
+                                Hati-hati dengan kalimat invers/konvers! Pernyataan <em>"Jika hujan maka jalan basah"</em> <strong>TIDAK BISA</strong> disimpulkan <em>"Jika jalan basah maka hujan"</em>. Kebalikannya yang sah hanyalah <strong>Kontraposisi (~Q &rarr; ~P)</strong>: <em>"Jika jalan tidak basah, maka tidak hujan"</em>.
+                            </p>
+                        </div>
+
+                        <!-- Example Box -->
+                        <div class="bg-slate-100 dark:bg-slate-900 p-5 rounded-2xl border border-lightBorder dark:border-darkBorder">
+                            <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-md">Studi Kasus Soal SNBT</span>
+                            <p class="text-xs md:text-sm font-semibold text-slate-900 dark:text-white mt-2">Premis 1: Semua teknisi memahami skema sistem.</p>
+                            <p class="text-xs md:text-sm font-semibold text-slate-900 dark:text-white">Premis 2: Budi tidak memahami skema sistem.</p>
+                            <p class="text-xs md:text-sm text-brandOrange font-bold mt-2">Kesimpulan AI: Budi bukan seorang teknisi. (Modus Tollens)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar AI Summary & Key takeaways -->
+                <div class="space-y-6">
+                    <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-6 rounded-3xl shadow-sm">
+                        <h3 class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2 text-xs uppercase tracking-wider">
+                            <i class="fa-solid fa-list-check text-brandOrange"></i> Poin Racikan Kunci
+                        </h3>
+                        <ul class="space-y-3 text-xs text-slate-600 dark:text-slate-300">
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-emerald-500 mt-0.5"></i>
+                                <span>Ingat rumus <strong>P &rarr; Q &equiv; ~Q &rarr; ~P</strong> (Kontraposisi).</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-emerald-500 mt-0.5"></i>
+                                <span>Kata "Semua" diganti "Ada/Beberapa" ketika di-negasi.</span>
+                            </li>
+                            <li class="flex items-start gap-2.5">
+                                <i class="fa-solid fa-check text-emerald-500 mt-0.5"></i>
+                                <span>Jangan gunakan asumsi luar, fokus HANYA pada fakta di soal!</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- AI Assistant Card -->
+                    <div class="bg-gradient-to-br from-orange-500/10 via-red-500/5 to-transparent border border-brandOrange/30 p-6 rounded-3xl relative overflow-hidden">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center text-white text-xs font-bold">
+                                AI
+                            </div>
+                            <h4 class="font-bold text-slate-900 dark:text-white text-sm">Bingung Racik Rumus?</h4>
+                        </div>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mb-4">Tanyakan langsung pada Chef AI Tutor untuk penjelasan lebih simpel atau contoh soal tambahan.</p>
+                        <button onclick="openAIChat('Jelaskan lagi rumus Silogisme dengan contoh sederhana sehari-hari!')" class="w-full py-2.5 rounded-xl bg-white dark:bg-darkCard hover:bg-slate-100 dark:hover:bg-slate-800 border border-lightBorder dark:border-darkBorder text-xs font-bold text-brandOrange transition">
+                            <i class="fa-solid fa-comments mr-1"></i> Tanya Chef AI Sekarang
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 3: UJI RACIKAN (KUIS INTERAKTIF) -->
+        <section id="tab-quiz" class="hidden space-y-6">
+            <div class="max-w-3xl mx-auto">
+                <!-- Quiz Header -->
+                <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-6 rounded-3xl mb-6 flex items-center justify-between shadow-sm">
+                    <div>
+                        <span class="text-xs font-bold text-brandOrange tracking-widest uppercase">Evaluasi Memasak Harian</span>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white">Kuis Penalaran Umum #03</h2>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-slate-500 dark:text-slate-400 block">Soal <span id="quizCurrentNum">1</span> dari <span id="quizTotalNum">3</span></span>
+                        <span class="text-xs font-gamer font-bold text-amber-500" id="quizScoreTracker">+25 MMR / Soal</span>
+                    </div>
+                </div>
+
+                <!-- Quiz Card -->
+                <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-6 md:p-8 rounded-3xl space-y-6 relative shadow-sm" id="quizCard">
+                    <!-- Progress Bar -->
+                    <div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                        <div id="quizProgressBar" class="gradient-bg h-full transition-all duration-300" style="width: 33%;"></div>
+                    </div>
+
+                    <!-- Question text -->
+                    <div id="quizQuestionBox">
+                        <h3 class="text-base md:text-lg font-bold text-slate-900 dark:text-slate-100 leading-snug" id="quizQuestionText">
+                            <!-- Question text injected here -->
+                        </h3>
+                    </div>
+
+                    <!-- Options list -->
+                    <div class="space-y-3" id="quizOptionsContainer">
+                        <!-- Options injected via JS -->
+                    </div>
+
+                    <!-- Discussion / AI Explanation Modal Box -->
+                    <div id="quizExplanationBox" class="hidden bg-slate-50 dark:bg-slate-900 border border-lightBorder dark:border-darkBorder p-5 rounded-2xl space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span id="quizResultBadge" class="px-2.5 py-1 rounded-md text-xs font-bold"></span>
+                            <button onclick="askAIForQuizHelp()" class="text-xs font-bold text-brandOrange hover:underline flex items-center gap-1">
+                                <i class="fa-solid fa-robot"></i> Minta Penjelasan AI
+                            </button>
+                        </div>
+                        <p class="text-xs md:text-sm text-slate-700 dark:text-slate-300 leading-relaxed" id="quizExplanationText">
+                        </p>
+                        <button onclick="nextQuestion()" class="mt-2 w-full py-3 rounded-xl gradient-bg font-bold text-white text-xs md:text-sm hover:opacity-90 transition">
+                            Lanjut Soal Berikutnya <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 4: DIAGRAM MMR, DIAGNOSA MATERI, & EVALUASI PERFORMA -->
+        <section id="tab-analytics" class="hidden space-y-8">
+            <!-- ML Header Banner -->
+            <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder rounded-3xl p-6 md:p-8 relative overflow-hidden shadow-sm">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6 z-10 relative">
+                    <div class="flex items-center gap-5">
+                        <div class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-red-600 via-orange-500 to-amber-400 p-1 flex items-center justify-center glow-orange">
+                            <div class="w-full h-full bg-slate-900 rounded-xl flex items-center justify-center flex-col">
+                                <span class="font-gamer font-black text-xl text-amber-400" id="overallRankBadge">MYTHIC</span>
+                                <span class="text-[9px] text-slate-400 uppercase font-bold tracking-widest">TIER</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 class="text-2xl font-bold font-gamer text-slate-900 dark:text-white">REKAP & DIAGRAM PERFORMA</h2>
+                                <span class="bg-red-500/10 text-brandRed border border-red-500/20 text-[10px] px-2 py-0.5 rounded font-bold uppercase">Pro Analytics</span>
+                            </div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Pantau grafik penguasaan materi, riwayat MMR, dan daftar materi belum dikuasai.</p>
+                        </div>
+                    </div>
+
+                    <!-- Stats Numbers -->
+                    <div class="flex items-center gap-6 bg-slate-50 dark:bg-slate-900 px-6 py-4 rounded-2xl border border-lightBorder dark:border-darkBorder">
+                        <div class="text-center">
+                            <span class="text-2xl font-black font-gamer text-emerald-500" id="statTotalMatches">30</span>
+                            <span class="block text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Match / Kuis</span>
+                        </div>
+                        <div class="h-8 w-px bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="text-center">
+                            <span class="text-2xl font-black font-gamer text-brandOrange" id="statOverallMMR">740 Pts</span>
+                            <span class="block text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Total MMR PTN</span>
+                        </div>
+                        <div class="h-8 w-px bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="text-center">
+                            <span class="text-2xl font-black font-gamer text-amber-500">22 Win / 8 Loss</span>
+                            <span class="block text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Rasio Menang</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CHART.JS VISUALIZATION SECTION -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Chart 1: Radar Chart (Penguasaan 7 Subtes SNBT) -->
+                <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-6 rounded-3xl shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+                                <i class="fa-solid fa-chart-pie text-brandOrange"></i> Radar Penguasaan Sub-Tes SNBT
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Peta kekuatan materi (%) berdasarkan hasil latihan</p>
+                        </div>
+                        <span class="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded">Live Data</span>
+                    </div>
+                    <div class="relative h-64 w-full flex items-center justify-center">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Bar Chart (Riwayat MMR Mingguan) -->
+                <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-6 rounded-3xl shadow-sm space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+                                <i class="fa-solid fa-chart-column text-brandRed"></i> Riwayat Progres MMR Mingguan
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Pertumbuhan skor simulasi dari Minggu 1 ke 4</p>
+                        </div>
+                        <span class="text-[10px] font-bold text-brandOrange bg-orange-500/10 px-2 py-1 rounded">+180 Pts Pekan Ini</span>
+                    </div>
+                    <div class="relative h-64 w-full flex items-center justify-center">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FITUR: MATERI YANG BELUM DIKUASAI (DIAGNOSA KELEMAHAN DETAIL) -->
+            <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder rounded-3xl p-6 md:p-8 space-y-6 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-lightBorder dark:border-darkBorder pb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation text-brandRed"></i> Diagnosa Materi Belum Dikuasai
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Daftar topik merah/kuning yang membutuhkan intervensi dan resep remedial AI</p>
+                    </div>
+                    <span class="text-xs font-semibold text-brandRed bg-red-500/10 px-3 py-1 rounded-xl border border-red-500/20 self-start sm:self-auto">
+                        3 Topik Perlu Perhatian
+                    </span>
+                </div>
+
+                <!-- Weak Topics List -->
+                <div class="space-y-4" id="weakTopicsList">
+                    <!-- Dynamic rendering by JS -->
+                </div>
+            </div>
+
+            <!-- Subject MMR Cards -->
+            <div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-brandOrange"></i> Break Down Poin Power & MMR Per Sub-Tes
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="subjectWinrateGrid">
+                    <!-- Subject cards populated by JS -->
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TAB 5: PRICING & MONETIZATION (CHEF PASS) -->
+        <section id="tab-pricing" class="hidden space-y-8">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <span class="px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-500 text-xs font-bold uppercase tracking-wider">
+                    Model Langganan Hemat Pelajar
+                </span>
+                <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white">Investasi Kecil untuk <span class="gradient-text">Masak Skor PTN Impian</span></h2>
+                <p class="text-slate-500 dark:text-slate-400 text-xs md:text-sm">Buka semua resep materi, kuis unlimited, dan Chef AI Tutor 24/7!</p>
+            </div>
+
+            <!-- Pricing Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <!-- Free Plan -->
+                <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-6 rounded-3xl flex flex-col justify-between space-y-6 shadow-sm">
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">Koki Pemula (Free)</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Untuk uji coba fitur awal SIMAK</p>
+                        </div>
+                        <div class="text-3xl font-black text-slate-900 dark:text-white font-gamer">
+                            Rp 0 <span class="text-xs text-slate-500 dark:text-slate-400 font-sans font-normal">/ selamanya</span>
+                        </div>
+                        <ul class="space-y-3 text-xs text-slate-600 dark:text-slate-300 pt-2 border-t border-lightBorder dark:border-darkBorder">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Resep AI Belajar Harian (Standar)</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Akses 3 Kuis SNBT / Hari</li>
+                            <li class="flex items-center gap-2 text-slate-400"><i class="fa-solid fa-xmark"></i> Rekap Performa MMR Detail</li>
+                            <li class="flex items-center gap-2 text-slate-400"><i class="fa-solid fa-xmark"></i> Chat Chef AI Tutor Unlimited</li>
+                        </ul>
+                    </div>
+                    <button class="w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                        Paket Saat Ini
+                    </button>
+                </div>
+
+                <!-- Pro Plan (BEST VALUE) -->
+                <div class="bg-gradient-to-b from-white to-orange-50/30 dark:from-slate-900 dark:to-darkBg border-2 border-brandOrange p-6 rounded-3xl flex flex-col justify-between space-y-6 relative shadow-2xl glow-orange">
+                    <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 gradient-bg text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow">
+                        Paling Favorit
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                Chef Pass Pro <i class="fa-solid fa-crown text-amber-500"></i>
+                            </h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Semua resep dan fitur terbuka penuh</p>
+                        </div>
+                        <div class="text-3xl font-black text-slate-900 dark:text-white font-gamer">
+                            Rp 15.000 <span class="text-xs text-slate-500 dark:text-slate-400 font-sans font-normal">/ bulan</span>
+                        </div>
+                        <ul class="space-y-3 text-xs text-slate-700 dark:text-slate-200 pt-2 border-t border-lightBorder dark:border-darkBorder">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> AI Scheduler Adaptif Sekolah / PKL</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Kuis & Bank Soal SNBT Unlimited</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Dashboard Radar Chart & MMR Detail</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-amber-500"></i> Chat Chef AI Tutor 24/7 Tanpa Batas</li>
+                        </ul>
+                    </div>
+                    <button onclick="openPaymentModal('Chef Pass Pro - Rp 15.000/bln')" class="w-full py-3 rounded-xl gradient-bg font-bold text-white text-xs hover:opacity-90 transition shadow-lg">
+                        Langganan Sekarang
+                    </button>
+                </div>
+
+                <!-- Lifetime Pass -->
+                <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-6 rounded-3xl flex flex-col justify-between space-y-6 shadow-sm">
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-800 dark:text-slate-200">Master Chef PTN Pass</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Bayar sekali, masak skor sampai lulus</p>
+                        </div>
+                        <div class="text-3xl font-black text-slate-900 dark:text-white font-gamer">
+                            Rp 35.000 <span class="text-xs text-slate-500 dark:text-slate-400 font-sans font-normal">/ sekali bayar</span>
+                        </div>
+                        <ul class="space-y-3 text-xs text-slate-600 dark:text-slate-300 pt-2 border-t border-lightBorder dark:border-darkBorder">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Akses Semua Fitur Pro Permanen</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Garansi Update Bank Soal 2027</li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-500"></i> Modul Khusus Lintas Jurusan</li>
+                        </ul>
+                    </div>
+                    <button onclick="openPaymentModal('Master Chef PTN Pass - Rp 35.000 (Sekali Bayar)')" class="w-full py-3 rounded-xl bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder text-brandOrange hover:border-brandOrange font-bold text-xs transition">
+                        Pilih Sekali Bayar
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-white dark:bg-darkCard border-t border-lightBorder dark:border-darkBorder py-6 mt-12 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 text-center sm:flex sm:justify-between sm:items-center">
+            <p class="text-xs text-slate-500 dark:text-slate-400">&copy; 2026 SIMAK (Siap Memasak) SNBT - Platform Belajar Terjadwal Pelajar SMA/SMK.</p>
+            <div class="flex justify-center space-x-4 mt-3 sm:mt-0 text-xs text-slate-500 dark:text-slate-400">
+                <a href="#" class="hover:text-brandOrange">Kebijakan Privasi</a>
+                <a href="#" class="hover:text-brandOrange">Syarat & Ketentuan</a>
+                <a href="#" class="hover:text-brandOrange">Kontak Chef AI</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI CHATBOT WIDGET (CHEF AI TUTOR) -->
+    <div class="fixed bottom-5 right-5 z-50">
+        <button onclick="toggleAIChatWindow()" class="w-14 h-14 rounded-full gradient-bg flex items-center justify-center text-white text-xl shadow-2xl hover:scale-105 transition glow-orange">
+            <i class="fa-solid fa-robot" id="chatIcon"></i>
+        </button>
+
+        <div id="aiChatWindow" class="hidden absolute bottom-16 right-0 w-80 sm:w-96 bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder rounded-3xl shadow-2xl flex flex-col h-96 overflow-hidden transition-colors">
+            <div class="p-4 bg-slate-100 dark:bg-slate-900 border-b border-lightBorder dark:border-darkBorder flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-3 h-3 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span class="font-bold text-xs text-slate-900 dark:text-white">Chef AI Tutor SNBT (Online)</span>
+                </div>
+                <button onclick="toggleAIChatWindow()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-xs">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="chatMessages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs">
+                <div class="bg-slate-100 dark:bg-slate-900 p-3 rounded-2xl rounded-tl-none border border-lightBorder dark:border-darkBorder text-slate-800 dark:text-slate-300 max-w-[85%]">
+                    Halo! Saya Chef AI SIMAK SNBT. Bumbu materi atau kuis mana yang ingin kita bedah bersama hari ini?
+                </div>
+            </div>
+
+            <div class="p-3 bg-slate-50 dark:bg-slate-900 border-t border-lightBorder dark:border-darkBorder flex gap-2">
+                <input type="text" id="chatInput" placeholder="Tanyakan racikan rumus SNBT..." onkeypress="if(event.key==='Enter') sendChatMessage()" class="flex-1 bg-white dark:bg-darkBg border border-lightBorder dark:border-darkBorder rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-brandOrange">
+                <button onclick="sendChatMessage()" class="w-9 h-9 rounded-xl gradient-bg text-white flex items-center justify-center text-xs">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ATUR TANGGAL TARGET UTBK -->
+    <div id="dateModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder rounded-3xl max-w-sm w-full p-6 space-y-5 relative shadow-2xl">
+            <button onclick="closeDateModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="space-y-1">
+                <span class="text-xs font-bold text-brandOrange tracking-widest uppercase">Target Waktu</span>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Atur Tanggal UTBK & Mulai</h3>
+            </div>
+
+            <form onsubmit="saveTargetDate(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Tanggal Mulai Belajar</label>
+                    <input type="date" id="startDateInput" class="w-full bg-slate-50 dark:bg-darkBg border border-lightBorder dark:border-darkBorder rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white focus:border-brandOrange" required>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Tanggal Pelaksanaan UTBK</label>
+                    <input type="date" id="examDateInput" class="w-full bg-slate-50 dark:bg-darkBg border border-lightBorder dark:border-darkBorder rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white focus:border-brandOrange" required>
+                </div>
+                <button type="submit" class="w-full py-3 rounded-xl gradient-bg font-bold text-white text-xs hover:opacity-90 transition">
+                    Simpan & Hitung Ulang
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ONBOARDING / AI SCHEDULE GENERATOR -->
+    <div id="onboardingModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder rounded-3xl max-w-md w-full p-6 space-y-6 relative shadow-2xl">
+            <button onclick="closeOnboardingModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="space-y-2">
+                <span class="text-xs font-bold text-brandOrange tracking-widest uppercase">Racikan Jadwal AI</span>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white">Atur Porsi Belajar SIMAK</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Beri tahu AI kondisi & targetmu agar jadwal belajar tidak saling bentrok.</p>
+            </div>
+
+            <form id="onboardingForm" onsubmit="generateCustomSchedule(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Status Pendidikan</label>
+                    <select id="userStream" class="w-full bg-slate-50 dark:bg-darkBg border border-lightBorder dark:border-darkBorder rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white focus:border-brandOrange">
+                        <option value="SMK Tekno">Siswa SMK (Teknik/IT)</option>
+                        <option value="SMK Bisnis">Siswa SMK (Bisnis/Manajemen)</option>
+                        <option value="SMA IPA">Siswa SMA (IPA)</option>
+                        <option value="SMA IPS">Siswa SMA (IPS)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Target PTN & Jurusan Impian</label>
+                    <input type="text" id="userTargetInput" value="Teknik Informatika - ITB" class="w-full bg-slate-50 dark:bg-darkBg border border-lightBorder dark:border-darkBorder rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white focus:border-brandOrange" required>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Waktu Luang Harian</label>
+                    <select id="userTimeInput" class="w-full bg-slate-50 dark:bg-darkBg border border-lightBorder dark:border-darkBorder rounded-xl px-3 py-2.5 text-xs text-slate-900 dark:text-white focus:border-brandOrange">
+                        <option value="45 Menit / Hari">45 Menit / Hari (Sangat Sibuk PKL/Sekolah)</option>
+                        <option value="1.5 Jam / Hari" selected>1.5 Jam / Hari (Rata-rata Pulang Sekolah)</option>
+                        <option value="2.5 Jam / Hari">2.5 Jam / Hari (Fokus SNBT)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full py-3 rounded-xl gradient-bg font-bold text-white text-xs hover:opacity-90 transition mt-4">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Generate Racikan Jadwal Baru
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: CHECKOUT / PAYMENT SIMULATION -->
+    <div id="paymentModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder rounded-3xl max-w-sm w-full p-6 space-y-5 text-center relative shadow-2xl">
+            <button onclick="closePaymentModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700 dark:hover:text-white">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="w-12 h-12 rounded-full bg-orange-500/10 text-brandOrange border border-orange-500/30 flex items-center justify-center mx-auto text-xl font-bold">
+                <i class="fa-solid fa-qrcode"></i>
+            </div>
+
+            <div>
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Pembayaran QRIS SIMAK</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1" id="paymentPackageTitle">Chef Pass Pro - Rp 15.000/bln</p>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl w-48 h-48 mx-auto flex items-center justify-center border border-slate-300 shadow-inner">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=SIMAK-SNBT-CHEF-PASS" alt="QRIS Simulator" class="w-full h-full object-contain">
+            </div>
+
+            <p class="text-[11px] text-slate-500 dark:text-slate-400">Scan via GoPay, OVO, ShopeePay, Dana, atau Bank.</p>
+
+            <button onclick="confirmSimulatedPayment()" class="w-full py-3 rounded-xl gradient-bg font-bold text-white text-xs hover:opacity-90 transition">
+                Simulasi Pembayaran Berhasil <i class="fa-solid fa-check ml-1"></i>
+            </button>
+        </div>
+    </div>
+
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // MOCK DATA: KUIS SNBT
+        const quizData = [
+            {
+                question: "Premis 1: Jika Budi lulus uji kompetensi, maka ia mendapatkan sertifikat BNSP.<br>Premis 2: Budi tidak mendapatkan sertifikat BNSP.<br>Kesimpulan yang sah adalah...",
+                options: [
+                    "Budi lulus uji kompetensi.",
+                    "Budi tidak lulus uji kompetensi.",
+                    "Budi tetap bekerja walaupun tidak memiliki sertifikat.",
+                    "Budi sedang menunggu pengumuman BNSP.",
+                    "Tidak ada kesimpulan yang sah."
+                ],
+                correctIndex: 1,
+                explanation: "Sesuai rumus <strong>Modus Tollens</strong>: (P &rarr; Q) dan (~Q), maka kesimpulannya adalah (~P) yaitu Budi tidak lulus uji kompetensi."
+            },
+            {
+                question: "Semua siswa kelas XII mengikuti tryout SNBT. Sebagian siswa kelas XII membawa laptop pribadi.<br>Kesimpulan yang benar adalah...",
+                options: [
+                    "Semua siswa yang membawa laptop pribadi tidak mengikuti tryout.",
+                    "Sebagian siswa yang mengikuti tryout SNBT membawa laptop pribadi.",
+                    "Semua siswa yang mengikuti tryout SNBT membawa laptop.",
+                    "Siswa yang tidak membawa laptop tidak boleh ikut tryout.",
+                    "Tidak dapat disimpulkan."
+                ],
+                correctIndex: 1,
+                explanation: "Penggabungan premis 'Semua A adalah B' dan 'Sebagian A adalah C' menghasilkan kesimpulan 'Sebagian B adalah C'."
+            },
+            {
+                question: "Jika nilai matematika Maya &gt; 80, maka Maya mengambil jurusan Teknik Informatika. Jika Maya mengambil jurusan Teknik Informatika, Maya akan belajar koding tiap malam.<br>Ternyata Maya tidak belajar koding tiap malam. Kesimpulannya...",
+                options: [
+                    "Nilai matematika Maya &le; 80.",
+                    "Nilai matematika Maya &gt; 80.",
+                    "Maya tetap mengambil jurusan Teknik Informatika.",
+                    "Maya belajar koding siang hari.",
+                    "Maya lulus SNBT dengan nilai sempurna."
+                ],
+                correctIndex: 0,
+                explanation: "Menggunakan gabungan <strong>Silogisme & Modus Tollens</strong>. Silogisme: Nilai > 80 &rarr; Belajar Koding. Karena ~Belajar Koding, maka kesimpulannya Nilai &le; 80."
+            }
+        ];
+
+        // MOCK DATA: MATERI BELUM DIKUASAI (DIAGNOSA DETAIL)
+        const weakTopicsData = [
+            {
+                subject: "Pengetahuan Kuantitatif",
+                topic: "Aljabar & Manipulasi Variabel Pecahan",
+                mmr: 450,
+                masteryPct: 45,
+                level: "Red Zone",
+                statusColor: "red",
+                description: "Sering salah pada perubahan tanda saat menyederhanakan pecahan aljabar bertingkat.",
+                remedialPrompt: "Jelaskan cara cepat menyederhanakan pecahan aljabar bertingkat untuk UTBK SNBT!"
+            },
+            {
+                subject: "Penalaran Matematika",
+                topic: "Aritmatika Sosial & Persentase Untung Rugi",
+                mmr: 520,
+                masteryPct: 52,
+                level: "Yellow Zone",
+                statusColor: "amber",
+                description: "Masih lambat menentukan harga beli awal jika diketahui diskon ganda berturut-turut.",
+                remedialPrompt: "Berikan trik 30 detik mengerjakan soal diskon ganda UTBK SNBT!"
+            },
+            {
+                subject: "Literasi Bahasa Inggris",
+                topic: "Inference & Author's Tone Identification",
+                mmr: 580,
+                masteryPct: 58,
+                level: "Yellow Zone",
+                statusColor: "amber",
+                description: "Sering terkecoh membedakan antara 'Critical Tone' dan 'Skeptical Tone' pada teks akademik.",
+                remedialPrompt: "Bagaimana cara membedakan tone penulis (Critical vs Skeptical) pada teks Bahasa Inggris SNBT?"
+            }
+        ];
+
+        // MOCK DATA: WEEKLY SCHEDULE
+        let weeklySchedule = [
+            { day: "Senin", subject: "Penalaran Umum", time: "19:00 - 19:45", status: "Selesai", icon: "fa-brain" },
+            { day: "Selasa", subject: "Pengetahuan Kuantitatif", time: "19:00 - 19:45", status: "Hari Ini", icon: "fa-calculator" },
+            { day: "Rabu", subject: "Pemahaman Bacaan", time: "19:00 - 19:45", status: "Mendatang", icon: "fa-book-open" },
+            { day: "Kamis", subject: "Literasi B. Inggris", time: "19:00 - 19:45", status: "Mendatang", icon: "fa-language" },
+            { day: "Jumat", subject: "Penalaran Matematika", time: "19:00 - 19:45", status: "Mendatang", icon: "fa-square-root-variable" },
+            { day: "Sabtu", subject: "Tryout Simulasi SIMAK", time: "14:00 - 16:00", status: "Mendatang", icon: "fa-trophy" },
+            { day: "Minggu", subject: "Evaluasi & Remedial AI", time: "10:00 - 11:30", status: "Mendatang", icon: "fa-chart-pie" }
+        ];
+
+        // MOCK DATA: SUBTES POWER
+        const subjectWinrates = [
+            { name: "Penalaran Umum", mmr: 780, maxMmr: 1000, matchRatio: "12 Win / 3 Loss", icon: "fa-brain", tier: "Mythic" },
+            { name: "Pengetahuan Kuantitatif", mmr: 450, maxMmr: 1000, matchRatio: "4 Win / 6 Loss", icon: "fa-calculator", tier: "Grandmaster" },
+            { name: "Literasi B. Indonesia", mmr: 820, maxMmr: 1000, matchRatio: "10 Win / 2 Loss", icon: "fa-book", tier: "Mythic Glory" },
+            { name: "Literasi B. Inggris", mmr: 610, maxMmr: 1000, matchRatio: "6 Win / 4 Loss", icon: "fa-language", tier: "Legend" }
+        ];
+
+        // STATE VARIABLES & DATES
+        let currentQuizIndex = 0;
+        let selectedOption = null;
+
+        let studyStartDate = new Date();
+        studyStartDate.setDate(studyStartDate.getDate() - 1); // Defaults to H+1
+
+        let targetExamDate = new Date();
+        targetExamDate.setDate(targetExamDate.getDate() + 46); // Defaults to H-46
+
+        // CHART INSTANCES
+        let radarChartInstance = null;
+        let barChartInstance = null;
+
+        // INITIALIZATION
+        window.onload = function() {
+            initTheme();
+            renderSchedule();
+            renderSubjectWinrates();
+            renderWeakTopics();
+            loadQuestion(0);
+            updateTargetDateCards();
+            initCharts();
+        };
+
+        // 1. THEME TOGGLE (TERANG / GELAP)
+        function initTheme() {
+            const savedTheme = localStorage.getItem('simakTheme');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.remove('dark');
+            } else {
+                document.documentElement.classList.add('dark');
+            }
+        }
+
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('simakTheme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('simakTheme', 'dark');
+            }
+            // Re-render charts for color adaptation
+            if (radarChartInstance && barChartInstance) {
+                radarChartInstance.destroy();
+                barChartInstance.destroy();
+                initCharts();
+            }
+        }
+
+        // 2. TARGET WAKTU UTBK LOGIC
+        function updateTargetDateCards() {
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            const startCopy = new Date(studyStartDate);
+            startCopy.setHours(0,0,0,0);
+            const diffConsistency = Math.floor((today - startCopy) / (1000 * 60 * 60 * 24));
+            document.getElementById('consistencyDisplay').innerText = `H+${diffConsistency >= 0 ? diffConsistency : 0}`;
+
+            const examCopy = new Date(targetExamDate);
+            examCopy.setHours(0,0,0,0);
+            const diffCountdown = Math.ceil((examCopy - today) / (1000 * 60 * 60 * 24));
+            document.getElementById('countdownDisplay').innerText = `H-${diffCountdown >= 0 ? diffCountdown : 0}`;
+        }
+
+        function openDateModal() {
+            document.getElementById('startDateInput').value = studyStartDate.toISOString().split('T')[0];
+            document.getElementById('examDateInput').value = targetExamDate.toISOString().split('T')[0];
+            document.getElementById('dateModal').classList.remove('hidden');
+        }
+
+        function closeDateModal() {
+            document.getElementById('dateModal').classList.add('hidden');
+        }
+
+        function saveTargetDate(e) {
+            e.preventDefault();
+            const startVal = document.getElementById('startDateInput').value;
+            const examVal = document.getElementById('examDateInput').value;
+
+            if (startVal) studyStartDate = new Date(startVal);
+            if (examVal) targetExamDate = new Date(examVal);
+
+            updateTargetDateCards();
+            closeDateModal();
+        }
+
+        // 3. CHART.JS INTEGRATION
+        function initCharts() {
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#94A3B8' : '#475569';
+            const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
+
+            // Radar Chart - 7 Subtes Mastery
+            const ctxRadar = document.getElementById('radarChart').getContext('2d');
+            radarChartInstance = new Chart(ctxRadar, {
+                type: 'radar',
+                data: {
+                    labels: ['Penalaran Umum', 'Pengetahuan Kuantitatif', 'PPU', 'PBM', 'Lit. B. Indonesia', 'Lit. B. Inggris', 'Penalaran MTK'],
+                    datasets: [{
+                        label: 'Penguasaan (%)',
+                        data: [78, 45, 70, 65, 82, 61, 52],
+                        backgroundColor: 'rgba(249, 115, 22, 0.25)',
+                        borderColor: '#F97316',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#EF4444',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#EF4444'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: gridColor },
+                            grid: { color: gridColor },
+                            pointLabels: {
+                                color: textColor,
+                                font: { size: 10, weight: '600' }
+                            },
+                            ticks: {
+                                backdropColor: 'transparent',
+                                color: textColor,
+                                stepSize: 20
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+
+            // Bar Chart - Progres MMR Mingguan
+            const ctxBar = document.getElementById('barChart').getContext('2d');
+            barChartInstance = new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4 (Hari Ini)'],
+                    datasets: [{
+                        label: 'Rata-Rata MMR',
+                        data: [560, 620, 680, 740],
+                        backgroundColor: [
+                            'rgba(239, 68, 68, 0.6)',
+                            'rgba(249, 115, 22, 0.6)',
+                            'rgba(245, 158, 11, 0.7)',
+                            'rgba(16, 185, 129, 0.85)'
+                        ],
+                        borderRadius: 8,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: textColor, font: { size: 11, weight: '600' } }
+                        },
+                        y: {
+                            grid: { color: gridColor },
+                            ticks: { color: textColor },
+                            suggestedMin: 400,
+                            suggestedMax: 1000
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        // 4. DIAGNOSA MATERI BELUM DIKUASAI
+        function renderWeakTopics() {
+            const container = document.getElementById('weakTopicsList');
+            container.innerHTML = '';
+
+            weakTopicsData.forEach(item => {
+                const isRed = item.statusColor === 'red';
+                const badgeBg = isRed ? 'bg-red-500/10 text-brandRed border-red-500/30' : 'bg-amber-500/10 text-amber-500 border-amber-500/30';
+                const barBg = isRed ? 'bg-brandRed' : 'bg-amber-500';
+
+                const html = `
+                    <div class="bg-slate-50 dark:bg-slate-900/90 border border-lightBorder dark:border-darkBorder p-4 md:p-5 rounded-2xl space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <div>
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">${item.subject}</span>
+                                <h4 class="text-sm font-bold text-slate-900 dark:text-white">${item.topic}</h4>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-gamer font-bold px-2.5 py-1 rounded-lg border ${badgeBg}">
+                                    ${item.level} (${item.mmr} Pts)
+                                </span>
+                                <button onclick="triggerRemedialAI('${item.remedialPrompt}')" class="px-3 py-1.5 rounded-xl gradient-bg text-white text-xs font-bold hover:opacity-90 transition flex items-center gap-1">
+                                    <i class="fa-solid fa-kitchen-set"></i> Masak Remedial
+                                </button>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-600 dark:text-slate-300">${item.description}</p>
+
+                        <div>
+                            <div class="flex justify-between text-[11px] font-semibold mb-1">
+                                <span class="text-slate-500 dark:text-slate-400">Tingkat Penguasaan</span>
+                                <span class="${isRed ? 'text-brandRed' : 'text-amber-500'} font-bold">${item.masteryPct}%</span>
+                            </div>
+                            <div class="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div class="h-full ${barBg}" style="width: ${item.masteryPct}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        function triggerRemedialAI(prompt) {
+            openAIChat(prompt);
+        }
+
+        // TAB SWITCHER
+        function switchTab(tabId) {
+            const tabs = ['schedule', 'material', 'quiz', 'analytics', 'pricing'];
+            tabs.forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                const navBtn = document.getElementById(`nav-${t}`);
+                if (t === tabId) {
+                    el.classList.remove('hidden');
+                    if (navBtn && !navBtn.classList.contains('gradient-bg')) {
+                        navBtn.classList.add('bg-slate-100', 'dark:bg-darkCard', 'text-brandOrange');
+                    }
+                } else {
+                    el.classList.add('hidden');
+                    if (navBtn) {
+                        navBtn.classList.remove('bg-slate-100', 'dark:bg-darkCard', 'text-brandOrange');
+                    }
+                }
+            });
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
+        }
+
+        // RENDER MOCK SCHEDULE
+        function renderSchedule() {
+            const container = document.getElementById('weeklyScheduleContainer');
+            container.innerHTML = '';
+            weeklySchedule.forEach((item) => {
+                const isToday = item.status === "Hari Ini";
+                const isDone = item.status === "Selesai";
+                
+                const cardHtml = `
+                    <div class="bg-slate-50 dark:bg-darkBg border ${isToday ? 'border-brandOrange glow-orange' : 'border-lightBorder dark:border-darkBorder'} p-4 rounded-2xl flex flex-col justify-between space-y-3 relative overflow-hidden">
+                        ${isToday ? '<span class="absolute top-0 right-0 bg-brandOrange text-white text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-bl-lg">Hari Ini</span>' : ''}
+                        <div>
+                            <span class="text-xs font-bold text-slate-500 dark:text-slate-400">${item.day}</span>
+                            <div class="w-8 h-8 rounded-lg ${isDone ? 'bg-emerald-500/20 text-emerald-500' : isToday ? 'gradient-bg text-white' : 'bg-slate-200 dark:bg-slate-800 text-slate-500'} flex items-center justify-center my-2">
+                                <i class="fa-solid ${item.icon} text-sm"></i>
+                            </div>
+                            <h4 class="text-xs font-bold text-slate-900 dark:text-white line-clamp-2">${item.subject}</h4>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-slate-500 dark:text-slate-400"><i class="fa-regular fa-clock mr-1"></i>${item.time}</p>
+                            <span class="inline-block mt-2 text-[10px] font-semibold ${isDone ? 'text-emerald-500' : isToday ? 'text-brandOrange' : 'text-slate-400'}">
+                                ${isDone ? '<i class="fa-solid fa-check"></i> Selesai' : isToday ? 'Siap Dikerjakan' : 'Tersedia Soon'}
+                            </span>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+        }
+
+        // RENDER SUBJECT MMR CARDS
+        function renderSubjectWinrates() {
+            const container = document.getElementById('subjectWinrateGrid');
+            container.innerHTML = '';
+            subjectWinrates.forEach(sub => {
+                let badgeColor = sub.mmr >= 750 ? 'text-emerald-500 border-emerald-500/30 bg-emerald-500/10' : sub.mmr >= 600 ? 'text-amber-500 border-amber-500/30 bg-amber-500/10' : 'text-brandRed border-red-500/30 bg-red-500/10';
+                
+                const html = `
+                    <div class="bg-white dark:bg-darkCard border border-lightBorder dark:border-darkBorder p-5 rounded-2xl space-y-4 shadow-sm">
+                        <div class="flex items-center justify-between">
+                            <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-900 border border-lightBorder dark:border-darkBorder flex items-center justify-center text-slate-700 dark:text-slate-300">
+                                <i class="fa-solid ${sub.icon}"></i>
+                            </div>
+                            <span class="text-xs font-gamer font-bold px-2.5 py-1 rounded-full border ${badgeColor}">
+                                ${sub.tier}
+                            </span>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-bold text-slate-900 dark:text-white">${sub.name}</h4>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400">${sub.matchRatio}</p>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-[11px] font-semibold mb-1">
+                                <span class="text-slate-500 dark:text-slate-400">Power MMR</span>
+                                <span class="text-slate-900 dark:text-white font-gamer">${sub.mmr} / ${sub.maxMmr} Pts</span>
+                            </div>
+                            <div class="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div class="h-full ${sub.mmr < 550 ? 'bg-brandRed' : 'gradient-bg'}" style="width: ${(sub.mmr / sub.maxMmr) * 100}%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += html;
+            });
+        }
+
+        // QUIZ SYSTEM LOGIC
+        function loadQuestion(index) {
+            currentQuizIndex = index;
+            selectedOption = null;
+            const q = quizData[index];
+            
+            document.getElementById('quizCurrentNum').innerText = index + 1;
+            document.getElementById('quizTotalNum').innerText = quizData.length;
+            document.getElementById('quizQuestionText').innerHTML = q.question;
+            document.getElementById('quizProgressBar').style.width = `${((index + 1) / quizData.length) * 100}%`;
+            document.getElementById('quizExplanationBox').classList.add('hidden');
+
+            const optionsContainer = document.getElementById('quizOptionsContainer');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt, optIndex) => {
+                const optBtn = document.createElement('button');
+                optBtn.className = `w-full text-left p-4 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-lightBorder dark:border-darkBorder hover:border-brandOrange text-slate-800 dark:text-slate-200 text-xs md:text-sm font-medium transition flex items-center justify-between group`;
+                optBtn.onclick = () => selectOption(optIndex);
+                optBtn.id = `option-${optIndex}`;
+                optBtn.innerHTML = `
+                    <span>${String.fromCharCode(65 + optIndex)}. ${opt}</span>
+                    <i class="fa-regular fa-circle text-slate-400 group-hover:text-brandOrange"></i>
+                `;
+                optionsContainer.appendChild(optBtn);
+            });
+        }
+
+        function selectOption(optIndex) {
+            selectedOption = optIndex;
+            const q = quizData[currentQuizIndex];
+            const isCorrect = optIndex === q.correctIndex;
+
+            const options = document.getElementById('quizOptionsContainer').children;
+            for (let i = 0; i < options.length; i++) {
+                options[i].onclick = null;
+                options[i].classList.remove('hover:border-brandOrange');
+                if (i === q.correctIndex) {
+                    options[i].classList.add('border-emerald-500', 'bg-emerald-500/10', 'text-emerald-600', 'dark:text-emerald-400');
+                } else if (i === optIndex && !isCorrect) {
+                    options[i].classList.add('border-brandRed', 'bg-red-500/10', 'text-brandRed');
+                }
+            }
+
+            const expBox = document.getElementById('quizExplanationBox');
+            const resultBadge = document.getElementById('quizResultBadge');
+            const expText = document.getElementById('quizExplanationText');
+
+            if (isCorrect) {
+                resultBadge.className = "px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30";
+                resultBadge.innerText = "VICTORY! Jawaban Benar (+25 MMR Pts)";
+            } else {
+                resultBadge.className = "px-2.5 py-1 rounded-md text-xs font-bold bg-red-500/20 text-brandRed border border-red-500/30";
+                resultBadge.innerText = "DEFEAT! Jawaban Kurang Tepat (-10 MMR Pts)";
+            }
+
+            expText.innerHTML = q.explanation;
+            expBox.classList.remove('hidden');
+        }
+
+        function askAIForQuizHelp() {
+            const q = quizData[currentQuizIndex];
+            openAIChat(`Chef AI, tolong jelaskan lebih detail konsep soal ini: "${q.question.replace(/<br>/g, ' ')}"`);
+        }
+
+        function nextQuestion() {
+            if (currentQuizIndex + 1 < quizData.length) {
+                loadQuestion(currentQuizIndex + 1);
+            } else {
+                alert('Selamat! Kamu telah meracik seluruh kuis harian. Skor MMR Performa kamu telah diperbarui!');
+                switchTab('analytics');
+                loadQuestion(0);
+            }
+        }
+
+        // CHATBOT SIMULATION
+        function toggleAIChatWindow() {
+            document.getElementById('aiChatWindow').classList.toggle('hidden');
+        }
+
+        function openAIChat(promptText) {
+            document.getElementById('aiChatWindow').classList.remove('hidden');
+            const input = document.getElementById('chatInput');
+            input.value = promptText;
+            sendChatMessage();
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const chatMessages = document.getElementById('chatMessages');
+
+            chatMessages.innerHTML += `
+                <div class="bg-brandOrange/20 border border-brandOrange/30 p-3 rounded-2xl rounded-tr-none text-slate-800 dark:text-slate-200 max-w-[85%] ml-auto text-right">
+                    ${msg}
+                </div>
+            `;
+
+            input.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            setTimeout(() => {
+                chatMessages.innerHTML += `
+                    <div class="bg-slate-100 dark:bg-slate-900 p-3 rounded-2xl rounded-tl-none border border-lightBorder dark:border-darkBorder text-slate-800 dark:text-slate-300 max-w-[85%]">
+                        <i class="fa-solid fa-utensils text-brandOrange mr-1"></i> <strong>Chef AI:</strong> Jawaban praktis racikanmu: Selalu petakan premis sebab-akibat (P &rarr; Q). Jika menemukan negasi, gunakan kontraposisi (~Q &rarr; ~P) agar tidak terkecoh!
+                    </div>
+                `;
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 800);
+        }
+
+        // ONBOARDING MODAL
+        function openOnboardingModal() {
+            document.getElementById('onboardingModal').classList.remove('hidden');
+        }
+        function closeOnboardingModal() {
+            document.getElementById('onboardingModal').classList.add('hidden');
+        }
+
+        function generateCustomSchedule(e) {
+            e.preventDefault();
+            const target = document.getElementById('userTargetInput').value;
+            const time = document.getElementById('userTimeInput').value;
+            const stream = document.getElementById('userStream').value;
+
+            document.getElementById('userTargetDisplay').innerText = target;
+            document.getElementById('statTargetPTN').innerText = target.split('-')[0] || target;
+            document.getElementById('statDailyTime').innerText = time;
+
+            closeOnboardingModal();
+            alert(`Chef AI Berhasil meracik ulang jadwal khusus untuk ${stream} dengan alokasi ${time}!`);
+            switchTab('schedule');
+        }
+
+        // PAYMENT MODAL
+        function openPaymentModal(packageName) {
+            document.getElementById('paymentPackageTitle').innerText = packageName;
+            document.getElementById('paymentModal').classList.remove('hidden');
+        }
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.add('hidden');
+        }
+        function confirmSimulatedPayment() {
+            closePaymentModal();
+            alert('Pembayaran Berhasil! Akun kamu kini resmi aktif sebagai SIMAK CHEF PASS PRO. Selamat Masak Skor PTN!');
+        }
+    </script>
+</body>
+</html>
